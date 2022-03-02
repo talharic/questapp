@@ -2,9 +2,7 @@ package com.talharic.questapp.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="user")
@@ -12,8 +10,8 @@ import javax.persistence.Table;
 public class User {
 
     @Id
-    private Long id;
-
-    private String userName;
-    private String password;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
+    String userName;
+    String password;
 }

@@ -2,6 +2,7 @@ package com.talharic.questapp.controller;
 
 import com.talharic.questapp.dto.LikeCreateRequest;
 import com.talharic.questapp.model.Like;
+import com.talharic.questapp.response.LikeResponse;
 import com.talharic.questapp.service.LikeService;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +20,8 @@ public class LikeController {
     }
 
     @GetMapping
-    public List<Like> getAllLikes(@RequestParam Optional<Long> userId,
-                                  @RequestParam Optional<Long> postId) {
+    public List<LikeResponse> getAllLikes(@RequestParam Optional<Long> userId,
+                                          @RequestParam Optional<Long> postId) {
         return likeService.getAllLikesWithParam(userId, postId);
     }
 

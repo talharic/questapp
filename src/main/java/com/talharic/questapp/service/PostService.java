@@ -5,7 +5,9 @@ import com.talharic.questapp.dto.PostUpdateRequest;
 import com.talharic.questapp.model.Post;
 import com.talharic.questapp.model.User;
 import com.talharic.questapp.repository.PostRepository;
+import com.talharic.questapp.response.LikeResponse;
 import com.talharic.questapp.response.PostResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,20 +18,28 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private PostRepository postRepository;
+    private LikeService likeService;
     private UserService userService;
 
-    public PostService(PostRepository postRepository, UserService userService) {
+    public PostService(PostRepository postRepository,
+                       UserService userService) {
         this.postRepository = postRepository;
         this.userService = userService;
     }
 
+    @Autowired
+    public void setLikeService(LikeService likeService) {
+        this.likeService = likeService;
+    }
     public List<PostResponse> getAllPosts(Optional<Long> userId) {
         List<Post> list;
         if(userId.isPresent()) {
             list = postRepository.findByUserId(userId.get());
-        }
-        list = postRepository.findAll();
-        return list.stream().map(p -> new PostResponse(p)).collect(Collectors.toList());
+        }else
+            list = postRepository.findAll();
+        return list.stream().map(p -> {
+            List<LikeResponse> likes = likeService.getAllLikesWithParam(Optional.ofNullable(null), Optional.of(p.getId()));
+            return new PostResponse(p,likes);}).collect(Collectors.toList());
     }
 
     public Post getOnePostById(Long postId) {
