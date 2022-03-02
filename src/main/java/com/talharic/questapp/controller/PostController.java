@@ -3,6 +3,7 @@ package com.talharic.questapp.controller;
 import com.talharic.questapp.dto.PostCreateRequest;
 import com.talharic.questapp.dto.PostUpdateRequest;
 import com.talharic.questapp.model.Post;
+import com.talharic.questapp.response.PostResponse;
 import com.talharic.questapp.service.PostService;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class PostController {
     }
 
     @GetMapping
-    public List<Post> getAllPosts(@RequestParam Optional<Long> userId) {
+    public List<PostResponse> getAllPosts(@RequestParam Optional<Long> userId) {
         return postService.getAllPosts(userId);
     }
 

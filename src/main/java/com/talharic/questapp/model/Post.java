@@ -13,17 +13,15 @@ import javax.persistence.*;
 public class Post {
 
     @Id
-    private Long id;
+    Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="user_id", nullable=false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    private User user;
+    User user;
 
-    private String title;
-
+    String title;
     @Lob
     @Column(columnDefinition="text")
-    private String text;
+    String text;
 }
