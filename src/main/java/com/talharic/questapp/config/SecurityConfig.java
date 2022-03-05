@@ -5,6 +5,7 @@ import com.talharic.questapp.security.JwtAuthenticationFilter;
 import com.talharic.questapp.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -80,6 +81,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(handler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/v1/post")
+                .permitAll()
+                .antMatchers(HttpMethod.GET, "/v1/comment")
+                .permitAll()
                 .antMatchers("/auth/**")
                 .permitAll()
                 .anyRequest().authenticated();
