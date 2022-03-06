@@ -10,6 +10,7 @@ import com.talharic.questapp.response.PostResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,11 +40,17 @@ public class PostService {
             list = postRepository.findAll();
         return list.stream().map(p -> {
             List<LikeResponse> likes = likeService.getAllLikesWithParam(Optional.ofNullable(null), Optional.of(p.getId()));
-            return new PostResponse(p,likes);}).collect(Collectors.toList());
+            return new PostResponse(p, likes);}).collect(Collectors.toList());
     }
 
     public Post getOnePostById(Long postId) {
         return postRepository.findById(postId).orElse(null);
+    }
+
+    public PostResponse getOnePostByIdWithLikes(Long postId) {
+        Post post = postRepository.findById(postId).orElse(null);
+        List<LikeResponse> likes = likeService.getAllLikesWithParam(Optional.ofNullable(null), Optional.of(postId));
+        return new PostResponse(post, likes);
     }
 
     public Post createOnePost(PostCreateRequest newPostRequest) {
@@ -55,6 +62,7 @@ public class PostService {
         toSave.setText(newPostRequest.getText());
         toSave.setTitle(newPostRequest.getTitle());
         toSave.setUser(user);
+        toSave.setCreateDate(new Date());
         return postRepository.save(toSave);
     }
 

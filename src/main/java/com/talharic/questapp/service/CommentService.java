@@ -8,6 +8,7 @@ import com.talharic.questapp.model.User;
 import com.talharic.questapp.repository.CommentRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,6 +50,7 @@ public class CommentService {
             commentToSave.setPost(post);
             commentToSave.setUser(user);
             commentToSave.setText(request.getText());
+            commentToSave.setCreateDate(new Date());
             return commentRepository.save(commentToSave);
         }else
             return null;

@@ -1,9 +1,13 @@
 package com.talharic.questapp.service;
 
 import com.talharic.questapp.model.User;
+import com.talharic.questapp.repository.CommentRepository;
+import com.talharic.questapp.repository.LikeRepository;
+import com.talharic.questapp.repository.PostRepository;
 import com.talharic.questapp.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,9 +15,16 @@ import java.util.Optional;
 public class UserService {
 
     UserRepository userRepository;
+    LikeRepository likeRepository;
+    CommentRepository commentRepository;
+    PostRepository postRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, LikeRepository likeRepository,
+                       CommentRepository commentRepository, PostRepository postRepository) {
         this.userRepository = userRepository;
+        this.likeRepository = likeRepository;
+        this.commentRepository = commentRepository;
+        this.postRepository = postRepository;
     }
 
     public List<User> getAllUsers() {
@@ -34,6 +45,7 @@ public class UserService {
             User foundUser = user.get();
             foundUser.setUserName(newUser.getUserName());
             foundUser.setPassword(newUser.getPassword());
+            foundUser.setAvatar(newUser.getAvatar());
             userRepository.save(foundUser);
             return foundUser;
         }else
@@ -46,6 +58,18 @@ public class UserService {
 
     public User getOneUserByUserName(String userName) {
         return userRepository.findByUserName(userName);
+    }
+
+    public List<Object> getUserActivity(Long userId) {
+        List<Long> postIds = postRepository.findTopByUserId(userId);
+        if(postIds.isEmpty())
+            return null;
+        List<Object> comments = commentRepository.findUserCommentsByPostId(postIds);
+        List<Object> likes = likeRepository.findUserLikesByPostId(postIds);
+        List<Object> result = new ArrayList<>();
+        result.addAll(comments);
+        result.addAll(likes);
+        return result;
     }
 
 
