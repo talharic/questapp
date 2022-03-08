@@ -3,6 +3,7 @@ package com.talharic.questapp.controller;
 import com.talharic.questapp.dto.CommentCreateRequest;
 import com.talharic.questapp.dto.CommentUpdateRequest;
 import com.talharic.questapp.model.Comment;
+import com.talharic.questapp.response.CommentResponse;
 import com.talharic.questapp.service.CommentService;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +21,8 @@ public class CommentController {
     }
 
     @GetMapping
-    public List<Comment> getAllComments(@RequestParam Optional<Long> userId,
-                                        @RequestParam Optional<Long> postId) {
+    public List<CommentResponse> getAllComments(@RequestParam Optional<Long> userId,
+                                                @RequestParam Optional<Long> postId) {
         return commentService.getAllCommentsWithParam(userId, postId);
     }
 
